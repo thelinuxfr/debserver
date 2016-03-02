@@ -2,8 +2,11 @@
 
 Petit script permettant d'automatiser plusieurs tâches pour Debian (Squeeze, Wheezy et Jessie)
 
-## Téléchargement
-https://git.lietart.fr/thelinuxfr/debserver/tags
+## Jessie
+
+Téléchargement : https://git.lietart.fr/thelinuxfr/debserver/tags
+
+---
 
 **Applications installées :**
 - ntp : http://www.ntp.org/
