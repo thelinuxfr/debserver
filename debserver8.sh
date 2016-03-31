@@ -429,8 +429,7 @@ echo -ne "\033[32;1mVoulez-vous installer Glances (via pip) (y/N): \033[0m"
 read GLANCES
 : ${GLANCES:="N"}
 if [[ ${GLANCES} == [Yy] ]]; then
-	apt-get install -y curl
-    curl -L http://bit.ly/glances | /bin/bash
+	wget -O- http://bit.ly/glances | /bin/bash
 fi
 #=============================================================================
 
