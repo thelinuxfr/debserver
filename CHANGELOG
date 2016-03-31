@@ -1,0 +1,8 @@
+#  (2016-03-31)
+
+* Add possibility to install rkhunter / fail2ban separately cd140f1
+* Fix auto updates install 3f0cc50
+* Fix beep install 2dde6dd
+* Install glances via wget 571742a
+* Minor fix a1796a7
+* Update Webmin d85ca67
