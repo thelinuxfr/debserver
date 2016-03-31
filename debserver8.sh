@@ -68,7 +68,7 @@ ${1} "
 
 # Syntaxe: # su - -c "./debserver8.sh"
 # Syntaxe: or # sudo ./debserver8.sh
-VERSION="8.0.2"
+VERSION="8.0-20160331"
 SOURCES="src"
 WEBMINVERSION="1.791"
 
