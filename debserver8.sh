@@ -70,6 +70,7 @@ ${1} "
 # Syntaxe: or # sudo ./debserver8.sh
 VERSION="8.0.2"
 SOURCES="src"
+WEBMINVERSION="1.791"
 
 #=============================================================================
 # Liste des applications à installer: A adapter a vos besoins
@@ -398,10 +399,10 @@ echo -ne "\033[32;1mVoulez-vous installer Webmin (y/N): \033[0m"
 read WEBMIN
 : ${WEBMIN:="N"}
 if [[ ${WEBMIN} == [Yy] ]]; then
-	wget http://prdownloads.sourceforge.net/webadmin/webmin_1.780_all.deb &&
-	dpkg --install webmin_1.780_all.deb ||
+	wget http://prdownloads.sourceforge.net/webadmin/webmin_$WEBMINVERSION_all.deb &&
+	dpkg --install webmin_$WEBMINVERSION_all.deb ||
 	apt-get install -fy &&
-	rm webmin_1.780_all.deb
+	rm webmin_$WEBMINVERSION_all.deb
 fi
 #=============================================================================
 
