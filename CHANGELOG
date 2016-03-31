@@ -1,9 +1,11 @@
-
-n.n.n / 2016-03-31
+9.0-dev / 2016-03-31
 ==================
 
+  * Preparation for the next Debian release
 
-#  (2016-03-31)
+
+8.0-20160331 / 2016-03-31
+==================
 
 * Add possibility to install rkhunter / fail2ban separately cd140f1
 * Fix auto updates install 3f0cc50
