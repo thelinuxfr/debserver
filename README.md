@@ -1,6 +1,6 @@
 # DEBServer
 
-Petit script permettant d'automatiser plusieurs tâches pour Debian (Squeeze, Wheezy et Jessie)
+Petit script permettant d'automatiser plusieurs tâches pour Debian (Wheezy, Jessie)
 
 **Téléchargement :** https://git.lietart.fr/thelinuxfr/debserver/tags
 
