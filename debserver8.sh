@@ -492,5 +492,7 @@ echo "Pensez à aller dans /etc/default pour configurer les daemons smartmontool
 echo ""
 echo "Notes de publication : https://www.debian.org/releases/jessie/releasenotes"
 echo "Manuel d'installation : https://www.debian.org/releases/jessie/installmanual"
+echo ""
+echo "Le cahier de l'administrateur Debian : https://debian-handbook.info/browse/fr-FR/stable/"
 echo -e "\033[34m========================================================================================================\033[0m"
 #=============================================================================
