@@ -75,7 +75,7 @@ WEBMINVERSION="1.791"
 #=============================================================================
 # Liste des applications à installer: A adapter a vos besoins
 # Voir plus bas les applications necessitant un depot specifique
-LISTE="ntp fail2ban htop rkhunter tree most ccze iftop safe-rm molly-guard manpages-fr manpages-fr-extra tmux bash-completion needrestart"
+LISTE="ntp htop tree most ccze iftop safe-rm molly-guard manpages-fr manpages-fr-extra tmux bash-completion needrestart"
 #=============================================================================
 
 #=============================================================================
@@ -456,6 +456,17 @@ if [[ ${UFW} == [Yy] ]]; then
     ufw allow ssh
     ufw logging on
     ufw enable
+fi
+#=============================================================================
+
+#=============================================================================
+# Install fail2ban & rkhunter
+#=============================================================================
+echo -ne "\033[32;1mVoulez-vous installer des systèmes anti-malwares/bruteforce (y/N): \033[0m"
+read CHEAT
+: ${FAIL2BAN:="N"}
+if [[ ${FAIL2BAN} == [Yy] ]]; then
+	apt-get install -y fail2ban rkhunter
 fi
 #=============================================================================
 
