@@ -197,7 +197,7 @@ read BEEP
 : ${BEEP:="N"}
 if [[ ${BEEP} == [Yy] ]]; then
     apt-get install -y beep
-	 cp -f $SOURCES/beep /etc/init.d/ && chmod +x /etc/init.d/beep && update-rc.d beep defaults
+	 cp -f $SOURCES/init.d/beep /etc/init.d/ && chmod +x /etc/init.d/beep && update-rc.d beep defaults
 fi
 #=============================================================================
 
