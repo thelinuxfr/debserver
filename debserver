@@ -463,7 +463,7 @@ fi
 # Install fail2ban & rkhunter
 #=============================================================================
 echo -ne "\033[32;1mVoulez-vous installer des systèmes anti-malwares/bruteforce (y/N): \033[0m"
-read CHEAT
+read FAIL2BAN
 : ${FAIL2BAN:="N"}
 if [[ ${FAIL2BAN} == [Yy] ]]; then
 	apt-get install -y fail2ban rkhunter
