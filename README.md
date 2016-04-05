@@ -1,6 +1,7 @@
 # DEBServer
 
-Petit script permettant d'automatiser plusieurs tâches pour Debian (Wheezy, Jessie)
+Petit script permettant d'automatiser plusieurs tâches pour Debian (Wheezy, Jessie).
+**ATTENTION** : le script remplace certains paramètres (bashrc, sources.list)
 
 ### Jessie
 wget -O- https://git.lietart.fr/thelinuxfr/debserver/raw/master/debserver8 | /bin/bash
@@ -11,6 +12,7 @@ wget -O- https://git.lietart.fr/thelinuxfr/debserver/raw/master/debserver7 | /bi
 ### Testing
 wget -O- https://git.lietart.fr/thelinuxfr/debserver/raw/master/debserver9 | /bin/bash
 
+---
 **Applications installées :**
 - ntp : http://www.ntp.org/
 - fail2ban : http://www.fail2ban.org/
