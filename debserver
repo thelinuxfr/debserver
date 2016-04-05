@@ -69,13 +69,12 @@ ${1} "
 # Syntaxe: # su - -c "./debserver"
 # Syntaxe: or # sudo ./debserver
 VERSION="9.0-dev"
-SOURCES="src"
 WEBMINVERSION="1.791"
 
 #=============================================================================
 # Liste des applications à installer: A adapter a vos besoins
 # Voir plus bas les applications necessitant un depot specifique
-LISTE="ntp htop tree most ccze iftop safe-rm molly-guard manpages-fr manpages-fr-extra tmux bash-completion needrestart"
+LISTE="ntp htop tree most ccze iftop safe-rm molly-guard manpages-fr manpages-fr-extra tmux bash-completion needrestart wget"
 #=============================================================================
 
 #=============================================================================
@@ -155,7 +154,49 @@ apt-get -y install $LISTE
 #=============================================================================
 # Configuration bashrc
 #=============================================================================
-cp -f $SOURCES/bashrc $HOME/.bashrc
+cat > $HOME/.bashrc << EOL
+#-------------------
+# Alias
+#-------------------
+
+alias ls='ls -h --color --group-directories-first'	# la couleur pour chaque type de fichier, les repertoires s'affichent en premier
+alias lsa='ls -A'	# affiche les fichiers caches
+alias ll='ls -ls'	# affiche en mode liste detail
+alias lla='ls -Al'	# affiche en mode liste detail + fichiers caches
+alias lx='ls -lXB'	# tri par extension
+alias lk='ls -lSr'      # tri par taille, le plus lourd à la fin
+alias lc='ls -ltcr'     # tri par date de modification, la pus recente à la fin
+alias lu='ls -ltur'     # tri par date d’acces, la pus recente à la fin
+alias lt='ls -ltr'      # tri par date, la pus recente à la fin
+alias lm='ls -al | more'        # Pipe a travers 'more'
+alias lr='ls -lR'       # ls recurssif
+alias tree='tree -Csu'  # affciche sous forme d'arborescence, necessite le paquet "tree"
+alias voirlog='tail -f' # affiche les derniere d'un fichier log (par exemple) en live
+alias df='df -kTh'      # commande df avec l'option -human
+alias du='du -kh'       # commande du avec l'option -human
+alias du1='du -kh --max-depth=1'        # commande du avec l'option -human, au niveau du repertoire courant
+alias free='free -m'    # commande free avec l'option affichage en Mo
+alias top='htop'                # necessite le paquet "htop", un top ameliore et en couleur
+alias shistory='history | grep'        # faire une recherche dans l'historique de commande
+alias h='history'              # raccourci history
+alias mkdir='mkdir -p'  # pour eviter l'ecrasement lors de creation de dossier
+alias ..='cd ..'        # raccourci repertoire parent
+alias rm="safe-rm" # evite les erreurs
+
+# Ajout log en couleurs
+ctail() { tail -f $1 | ccze -A; }
+cless() { ccze -A < $1 | less -R; }
+
+#set a fancy prompt (non-color, unless we know we want color)
+PS1="\\[\\033[01;31m\\][\\u@\\h\\[\\033[00m\\]:\\[\\033[01;34m\\]\\w]\\[\\033[00m\\]\\$ "
+
+# activation date_heure dans la commande history
+export HISTTIMEFORMAT="%Y/%m/%d_%T : "
+
+# les pages de man en couleur, necessite le paquet most
+export PAGER=most
+EOL
+
 clear
 #=============================================================================
 
@@ -197,8 +238,46 @@ echo -ne "\033[32;1mVoulez-vous mettre en place un bip au démarrage/extinction 
 read BEEP
 : ${BEEP:="N"}
 if [[ ${BEEP} == [Yy] ]]; then
-    apt-get install -y beep
-	 cp -f $SOURCES/init.d/beep /etc/init.d/ && chmod +x /etc/init.d/beep && update-rc.d beep defaults
+	apt-get install -y beep
+	cat > /etc/init.d/beep << EOL
+	#!/bin/sh
+
+	### BEGIN INIT INFO
+	# Provides:          beep
+	# Required-Start:    $all
+	# Required-Stop:     $all
+	# Should-Start:
+	# Should-Stop:
+	# Default-Start:     2 3 4 5
+	# Default-Stop:      0 1 6
+	# Short-Description: Beeps after system start or before shutdown
+	### END INIT INFO
+
+	case "$1" in
+	        start|"")
+	                /usr/bin/beep -l 125 -f 500 &&
+	                /usr/bin/beep -l 125 -f 1000 &&
+	                /usr/bin/beep -l 125 -f 2000 &&
+	                /usr/bin/beep -l 125 -f 3000 &&
+	                /usr/bin/beep -l 125 -f 4000 &&
+	                /usr/bin/beep -l 125 -f 5000
+	                ;;
+	        stop)
+	                /usr/bin/beep -l 125 -f 5000 &&
+	                /usr/bin/beep -l 125 -f 4000 &&
+	                /usr/bin/beep -l 125 -f 3000 &&
+	                /usr/bin/beep -l 125 -f 2000 &&
+	                /usr/bin/beep -l 125 -f 1000 &&
+	                /usr/bin/beep -l 125 -f 500
+	                ;;
+	        *)
+	                echo "Usage: beep [start|stop]" >&2
+	                exit 3
+	                ;;
+	esac
+EOL
+
+chmod +x /etc/init.d/beep && update-rc.d beep defaults
 fi
 #=============================================================================
 

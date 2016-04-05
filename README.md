@@ -2,8 +2,8 @@
 
 Petit script permettant d'automatiser plusieurs tâches pour Debian (Wheezy, Jessie)
 
-**Téléchargement :** https://git.lietart.fr/thelinuxfr/debserver/tags
-
+**Téléchargement :** 
+wget -O- https://git.lietart.fr/thelinuxfr/debserver/raw/master/debserver | /bin/bash
 ---
 
 **Applications installées :**
