@@ -2,10 +2,14 @@
 
 Petit script permettant d'automatiser plusieurs tâches pour Debian (Wheezy, Jessie)
 
-**Téléchargement :**
+### Jessie
+wget -O- https://git.lietart.fr/thelinuxfr/debserver/raw/master/debserver8 | /bin/bash
 
-wget -O- https://git.lietart.fr/thelinuxfr/debserver/raw/master/debserver | /bin/bash
----
+### Wheezy
+wget -O- https://git.lietart.fr/thelinuxfr/debserver/raw/master/debserver7 | /bin/bash
+
+### Testing
+wget -O- https://git.lietart.fr/thelinuxfr/debserver/raw/master/debserver9 | /bin/bash
 
 **Applications installées :**
 - ntp : http://www.ntp.org/
