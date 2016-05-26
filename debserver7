@@ -159,29 +159,29 @@ cat > $HOME/.bashrc << EOL
 # Alias
 #-------------------
 
-alias ls='ls -h --color --group-directories-first'	# la couleur pour chaque type de fichier, les repertoires s'affichent en premier
-alias lsa='ls -A'	# affiche les fichiers caches
-alias ll='ls -ls'	# affiche en mode liste detail
-alias lla='ls -Al'	# affiche en mode liste detail + fichiers caches
-alias lx='ls -lXB'	# tri par extension
-alias lk='ls -lSr'      # tri par taille, le plus lourd à la fin
-alias lc='ls -ltcr'     # tri par date de modification, la pus recente à la fin
-alias lu='ls -ltur'     # tri par date d’acces, la pus recente à la fin
-alias lt='ls -ltr'      # tri par date, la pus recente à la fin
-alias lm='ls -al | more'        # Pipe a travers 'more'
-alias lr='ls -lR'       # ls recurssif
-alias tree='tree -Csu'  # affciche sous forme d'arborescence, necessite le paquet "tree"
-alias voirlog='tail -f' # affiche les derniere d'un fichier log (par exemple) en live
-alias df='df -kTh'      # commande df avec l'option -human
-alias du='du -kh'       # commande du avec l'option -human
-alias du1='du -kh --max-depth=1'        # commande du avec l'option -human, au niveau du repertoire courant
-alias free='free -m'    # commande free avec l'option affichage en Mo
-alias top='htop'                # necessite le paquet "htop", un top ameliore et en couleur
-alias shistory='history | grep'        # faire une recherche dans l'historique de commande
-alias h='history'              # raccourci history
-alias mkdir='mkdir -p'  # pour eviter l'ecrasement lors de creation de dossier
-alias ..='cd ..'        # raccourci repertoire parent
-alias rm="safe-rm" # evite les erreurs
+alias ls='ls -h --color --group-directories-first'  # la couleur pour chaque type de fichier, les répertoires s'affichent en premier
+alias lsa='ls -A' # affiche les fichiers cachés
+alias ll='ls -ls' # affiche en mode liste détail
+alias lla='ls -Al'  # affiche en mode liste détail + fichiers cachés
+alias lx='ls -lXB'  # tri par extension
+alias lk='ls -lSr'  # tri par taille, le plus lourd à la fin
+alias lc='ls -ltcr' # tri par date de modification, la plus récente à la fin
+alias lu='ls -ltur' # tri par date d’accès, la plus récente à la fin
+alias lt='ls -ltr'  # tri par date, la plus récente à la fin
+alias lm='ls -al | more'  # Pipe a travers 'more'
+alias lr='ls -lR' # ls récurssif
+alias tree='tree -Csu'  # affciche sous forme d'arborescence, nécessite le paquet "tree"
+alias voirlog='tail -f' # affiche les dernière d'un fichier log (par exemple) en live
+alias df='df -kTh'  # commande df avec l'option -human
+alias du='du -kh' # commande du avec l'option -human
+alias duc='du -kh --max-depth=1'  # commande du avec l'option -human, au niveau du répertoire courant
+alias free='free -m'  # commande free avec l'option affichage en Mo
+alias top='htop'  # nécessite le paquet "htop", un top amélioré et en couleur
+alias shistory='history | grep' # faire une recherche dans l'historique de commande
+alias h='history' # raccourci history
+alias mkdir='mkdir -p'  # pour éviter l'écrasement lors de création de dossier
+alias ..='cd ..'	# raccourci répertoire parent
+alias rm="safe-rm"	# evite les erreurs
 
 # Ajout log en couleurs
 ctail() { tail -f $1 | ccze -A; }
@@ -195,6 +195,11 @@ export HISTTIMEFORMAT="%Y/%m/%d_%T : "
 
 # les pages de man en couleur, necessite le paquet most
 export PAGER=most
+
+# enable bash completion in interactive shells
+if [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+fi
 EOL
 
 clear
