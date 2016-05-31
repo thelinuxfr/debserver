@@ -1,10 +1,10 @@
 #!/bin/bash
 
-#    debserver8.sh - a bunch of functions used in the other scripts
+#    debserver8 - a bunch of functions used in the other scripts
 #
 #    DEBServer8 - Debian Install Server Scripts
 #    A set of scripts to automate installation of Servers on Debian
-#    Copyright (c) 2015 Frédéric LIETART - stuff@thelinuxfr.org
+#    Copyright (c) 2016 Frédéric LIETART - stuff@thelinuxfr.org
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -17,59 +17,10 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-
-# simple input thing
-# USAGE:
-# getInpute "Enter the info we need please : " type default
-# type = user | pw | domain | dir
-# default = optional default response
-# var1="${ANSWER}"
-getInpute () {
-	COUNTER=0
-	if [ "${2}" = "user" ]; then REGEX="^([0-9a-z\-]{3,16})$"; fi
-	if [ "${2}" = "pw" ]; then REGEX="^.{6,}$"; fi
-	if [ "${2}" = "dir" ]; then REGEX="^[/a-zA-Z0-9_\.\-]+$"; fi
-	if [ "${2}" = "domain" ]; then REGEX="^[a-z0-9\.\-]+$"; fi
-	if [ "${2}" = "db" ]; then REGEX="^[a-zA-Z0-9_\.\-]+$"; fi
-#	if [ "${2}" = "ip" ]; then REGEX="^[0-9{3}\.]{3}[0-9]{3}$"; fi
-	if [ "${2}" = "ip" ]; then REGEX="^([1]?[0-9]?[0-9]|2[0-5][0-9]|25[0-4])\.([1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])\.([1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])\.([1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-4])$"; fi
-	if [ "${2}" = "yn" ]; then REGEX="^[ynYN]$"; fi
-	echo -n "${1} "
-	while read ANSWER; do
-		: ${ANSWER:="$3"}
-		if [[ "${ANSWER}" =~ ${REGEX} ]] && [ -n "${ANSWER}" ]; then
-			break
-		fi
-		if [ "${COUNTER}" = "0" ]; then
-			echo -e "Answer contains forbidden characters,\nyou must use:"
-			if [ "${2}" = "user" ]; then
-				echo -e "\n- lower case letters\n- numbers (0-9)\n- between 3 and 16 characters"
-			elif [ "${2}" = "pw" ]; then
-				echo -e "\n- at least 6 characters"
-			elif [ "${2}" = "dir" ]; then
-				echo -e "\n- lower/upper case letters\n- numbers\n- \". _ - /\""
-			elif [ "${2}" = "domain" ]; then
-				echo -e "\n- lower case letters\n- numbers\n- \". -\""
-			elif [ "${2}" = "db" ]; then
-				echo -e "\n- lower/upper case letters\n- numbers\n- \". _ -\""
-			elif [ "${2}" = "ip" ]; then
-				echo -e "\n- a valid IPv4"
-			fi
-			echo -n "
-${1} "
-			COUNTER="`expr $COUNTER + 1`"
-		else
-			echo " Bad answer please try again"
-			echo -n "${1} "
-		fi
-	done
-}
 
 # Syntaxe: # su - -c "./debserver8.sh"
 # Syntaxe: or # sudo ./debserver8.sh
-VERSION="8.0-20160405"
-WEBMINVERSION="1.791"
+VERSION="8.0-20160531"
 
 #=============================================================================
 # Liste des applications à installer: A adapter a vos besoins
@@ -90,7 +41,7 @@ fi
 # Test si version de Debian OK
 #=============================================================================
 if [ $(cut -d. -f1 /etc/debian_version) == '8' ]; then
-        clear
+        echo "Version compatible, début de l'installation"
 else
         echo "Script non compatible avec votre version de Debian" 1>&2
         exit 1
@@ -214,7 +165,7 @@ export PAGER=most
 
 # enable bash completion in interactive shells
 if [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
+		. /etc/bash_completion
 fi
 EOL
 
@@ -313,50 +264,10 @@ if [[ ${NORECOMMENDS} == [Yy] ]]; then
     APT::Install-Suggests "0"; " > /etc/apt/apt.conf
 fi
 #=============================================================================
-clear
 
 #=============================================================================
-# Confirm IP addr
+# Config reseau
 #=============================================================================
-FOUNDIP=`ifconfig |grep Bcast|cut -d ":" -f 2|cut -d " " -f 1`
-DEFAULTIP=`ifconfig |grep Bcast|cut -d ":" -f 2|cut -d " " -f 1|head -n 1`
-echo -e "\033[34m========================================================================================================\\n IP(s) trouvée : ${FOUNDIP}\n========================================================================================================\\033[0m\n\nVérifier l'IP"
-getInpute "Entrer IP [default ${DEFAULTIP}]:" ip ${DEFAULTIP}
-IP="${ANSWER}"
-
-# Change FQDN ?
-FQDN=`hostname --fqdn`
-echo -ne "\nThis machine should have a proper hostname setup, something like: 'server.domain.tld'.\n
-Ideally it should correspond to the PTR of the IP ${IP}
-(or at least the PTR of the the public IP).\n
-The current fully qualified domain name appears to be: -> ${FQDN} <-\n\nDo you wan't to change that (y/N): "
-read CHANGEFQDN
-: ${CHANGEFQDN:="N"}
-if [[ ${CHANGEFQDN} == [Yy] ]]; then
-	getInpute "Entrer le nom de machine (pas le FQDN) (ex: server001):" domain
-	MACHINENAME="${ANSWER}"
-	getInpute "Entrer le nom de domaine (ex: domain.tld):" domain
-	DOMAIN="${ANSWER}"
-	FQDN="${MACHINENAME}.${DOMAIN}"
-fi
-
-# Change FQDN !
-if [[ ${CHANGEFQDN} == [Yy] ]]; then
-	echo ${FQDN} > /etc/hostname
-	hostname ${MACHINENAME}
-	echo "127.0.0.1       localhost
-127.0.1.1	${FQDN} ${MACHINENAME}
-${IP}	${FQDN} ${MACHINENAME}
-
-::1     ip6-localhost ip6-loopback
-fe00::0 ip6-localnet
-ff00::0 ip6-mcastprefix
-ff02::1 ip6-allnodes
-ff02::2 ip6-allrouters
-ff02::3 ip6-allhosts"  > /etc/hosts
-	echo -e "\n --> FQDN actuel de la machine : `hostname --fqdn`"
-fi
-
 echo "
 # The primary network interface
 #allow-hotplug eth0
@@ -499,10 +410,10 @@ echo -ne "\033[32;1mVoulez-vous installer Webmin (y/N): \033[0m"
 read WEBMIN
 : ${WEBMIN:="N"}
 if [[ ${WEBMIN} == [Yy] ]]; then
-	wget http://prdownloads.sourceforge.net/webadmin/webmin_$WEBMINVERSION_all.deb &&
-	dpkg --install webmin_$WEBMINVERSION_all.deb ||
+	wget http://prdownloads.sourceforge.net/webadmin/webmin_1.801_all.deb &&
+	dpkg --install webmin_1.801_all.deb ||
 	apt-get install -fy &&
-	rm webmin_$WEBMINVERSION_all.deb
+	rm webmin_1.801_all.deb
 fi
 #=============================================================================
 
