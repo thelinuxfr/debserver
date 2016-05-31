@@ -9,3 +9,4 @@ debian8:
 debian9:
   image: debian:testing
   script: "./test.sh debserver9"
+  allow_failure: true
