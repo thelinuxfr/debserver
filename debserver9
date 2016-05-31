@@ -41,7 +41,7 @@ fi
 #=============================================================================
 # Test si version de Debian OK
 #=============================================================================
-if [ $(cut -d. -f1 /etc/debian_version) == 'sid' ]; then
+if [ $(cut -d/ -f2 /etc/debian_version) == 'sid' ]; then
 				echo "Version compatible, début de l'installation"
 else
         echo "Script non compatible avec votre version de Debian" 1>&2
