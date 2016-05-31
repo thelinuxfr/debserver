@@ -1,8 +1,9 @@
 #/bin/sh
 
 ### Fix docker
-rm -f /etc/apt.conf.d/docker-gzip-indexes
-###
+echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+# setup docker modifications to NOT gzip indexes
+sed -i 's/Acquire::GzipIndexes "true"/Acquire::GzipIndexes "false"/g' /etc/apt/apt.conf.d/docker-gzip-indexes###
 
 chmod +x $1
 sed -i "s/LOCALES//g" $1
