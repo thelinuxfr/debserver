@@ -1,11 +1,11 @@
 debian7:
   image: debian:wheezy
-  script: "test.sh debserver7"
+  script: "./test.sh debserver7"
 
 debian8:
   image: debian:jessie
-  script: "test.sh debserver8"
+  script: "./test.sh debserver8"
 
 debian9:
   image: debian:testing
-  script: "test.sh debserver9"
+  script: "./test.sh debserver9"
