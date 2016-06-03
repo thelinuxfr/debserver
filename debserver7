@@ -21,7 +21,7 @@
 
 # Syntaxe: # su - -c "./debserver8.sh"
 # Syntaxe: or # sudo ./debserver8.sh
-VERSION="7.0-20160531"
+VERSION="7.0-20160603"
 
 #=============================================================================
 # Liste des applications à installer: A adapter a vos besoins
