@@ -1,4 +1,4 @@
-#/bin/sh
+#!/bin/sh
 
 ### Fix docker
 echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
