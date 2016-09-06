@@ -21,7 +21,7 @@
 
 # Syntaxe: # su - -c "./debserver"
 # Syntaxe: or # sudo ./debserver
-VERSION="9.0-dev"
+# VERSION="9.0-dev"
 
 #=============================================================================
 # Liste des applications à installer: A adapter a vos besoins
@@ -41,7 +41,7 @@ fi
 #=============================================================================
 # Test si version de Debian OK
 #=============================================================================
-if [ $(cut -d/ -f2 /etc/debian_version) == 'sid' ]; then
+if [ "$(cut -d. -f1 /etc/debian_version)" == "sid" ]; then
 				echo "Version compatible, début de l'installation"
 else
         echo "Script non compatible avec votre version de Debian" 1>&2
@@ -100,13 +100,13 @@ clear
 echo -e "\033[34m========================================================================================================\033[0m"
 echo "Installation des logiciels suivants: $LISTE"
 echo -e "\033[34m========================================================================================================\033[0m"
-apt-get -y install $LISTE
+apt-get -y install "$LISTE"
 #=============================================================================
 
 #=============================================================================
 # Configuration bashrc
 #=============================================================================
-cat > $HOME/.bashrc << EOL
+cat > "$HOME"/.bashrc << EOL
 #-------------------
 # Alias
 #-------------------
@@ -177,15 +177,15 @@ clear
 # Email admin
 #=============================================================================
 echo -ne "\033[32;1mAdresse mail pour les rapports de securite: \033[0m"
-read MAIL
+read -r MAIL
 #=============================================================================
 
 #=============================================================================
 # Reconfigure openssh-server !
 #=============================================================================
 echo -ne "\033[32;1mVoulez-vous autoriser l'accès root via SSH (y/N): \033[0m"
-read SSHROOT
-: ${SSHROOT:="N"}
+read -r SSHROOT
+: "${SSHROOT:="N"}"
 if [[ ${SSHROOT} == [Yy] ]]; then
 	echo 'openssh-server openssh-server/permit-root-login boolean true' | debconf-set-selections
 	sed -i "s/PermitRootLogin without-password/PermitRootLogin yes/g" /etc/ssh/sshd_config
@@ -197,8 +197,8 @@ fi
 # Reconfigure locales !
 #=============================================================================
 echo -ne "\033[32;1mVoulez-vous reconfigurer locales (y/N): \033[0m"
-read LOCALES
-: ${LOCALES:="N"}
+read -r LOCALES
+: "${LOCALES:="N"}"
 if [[ ${LOCALES} == [Yy] ]]; then
 	dpkg-reconfigure locales
 fi
@@ -208,8 +208,8 @@ fi
 # Install beep
 #=============================================================================
 echo -ne "\033[32;1mVoulez-vous mettre en place un bip au démarrage/extinction de la machine (y/N): \033[0m"
-read BEEP
-: ${BEEP:="N"}
+read -r BEEP
+: "${BEEP:="N"}"
 if [[ ${BEEP} == [Yy] ]]; then
 	apt-get install -y beep
 	cat > /etc/init.d/beep << EOL
@@ -258,11 +258,11 @@ fi
 # Désactiver les paquets recommandés !
 #=============================================================================
 echo -ne "\033[31;1mATTENTION : Voulez-vous désactiver l'installation de paquets recommandés (y/N): \033[0m"
-read NORECOMMENDS
-: ${NORECOMMENDS:="N"}
+read -r NORECOMMENDS
+: "${NORECOMMENDS:="N"}"
 if [[ ${NORECOMMENDS} == [Yy] ]]; then
-    echo "APT::Install-Recommends "0";
-    APT::Install-Suggests "0"; " > /etc/apt/apt.conf
+    echo "APT::Install-Recommends \"0\";
+    APT::Install-Suggests \"0\"; " > /etc/apt/apt.conf
 fi
 #=============================================================================
 clear
@@ -331,8 +331,8 @@ clear
 # Install apt-listbugs
 #=============================================================================
 echo -ne "\033[32;1mVoulez-vous installer apt-listbugs (y/N): \033[0m"
-read APTLISTBUGS
-: ${APTLISTBUGS:="N"}
+read -r APTLISTBUGS
+: "${APTLISTBUGS:="N"}"
 if [[ ${APTLISTBUGS} == [Yy] ]]; then
 	apt-get install -y apt-listbugs
 fi
@@ -341,8 +341,8 @@ fi
 #=============================================================================
 # Install smartmontools
 echo -ne "\033[32;1mVoulez-vous installer smartmontools (y/N): \033[0m"
-read SMART
-: ${SMART:="N"}
+read -r SMART
+: "${SMART:="N"}"
 if [[ ${SMART} == [Yy] ]]; then
 	apt-get install -y smartmontools
 fi
@@ -352,8 +352,8 @@ fi
 # Install hdparm
 #=============================================================================
 echo -ne "\033[32;1mVoulez-vous installer hdparm (y/N): \033[0m"
-read HDPARM
-: ${HDPARM:="N"}
+read -r HDPARM
+: "${HDPARM:="N"}"
 if [[ ${HDPARM} == [Yy] ]]; then
 	apt-get install -y hdparm
 fi
@@ -363,8 +363,8 @@ fi
 # Install lm-sensors
 #=============================================================================
 echo -ne "\033[32;1mVoulez-vous installer lm-sensors (y/N): \033[0m"
-read LMSENSORS
-: ${LMSENSORS:="N"}
+read -r LMSENSORS
+: "${LMSENSORS:="N"}"
 if [[ ${LMSENSORS} == [Yy] ]]; then
 	apt-get install -y lm-sensors
 fi
@@ -374,17 +374,17 @@ fi
 # Configuration cron-apt
 #=============================================================================
 echo -ne "\033[32;1mVoulez-vous installer cron-apt (y/N): \033[0m"
-read CRONAPT
-: ${CRONAPT:="N"}
+read -r CRONAPT
+: "${CRONAPT:="N"}"
 if [[ ${CRONAPT} == [Yy] ]]; then
     apt-get -y install -y cron-apt
 	echo "
 APTCOMMAND=/usr/bin/apt-get
-MAILTO="$MAIL"
-MAILON="upgrade"" > /etc/cron-apt/config
+MAILTO=\"$MAIL\"
+MAILON=\"upgrade\"" > /etc/cron-apt/config
 echo -ne "\033[32;1mVoulez-vous installer les mises à jours automatiquements (Y/n): \033[0m"
-read CRONAPTAUTO
-: ${CRONAPTAUTO:="Y"}
+read -r CRONAPTAUTO
+: "${CRONAPTAUTO:="Y"}"
 if [[ ${CRONAPTAUTO} == [Yy] ]]; then
     echo "dist-upgrade -y -o APT::Get::Show-Upgraded=true" > /etc/cron-apt/action.d/5-install
 fi
@@ -395,12 +395,12 @@ fi
 # Configuration Proxy APT
 #=============================================================================
 echo -ne "\033[32;1mVoulez-vous vous raccorder à un proxy APT (y/N): \033[0m"
-read PROXY
-: ${PROXY:="N"}
+read -r PROXY
+: "${PROXY:="N"}"
 if [[ ${PROXY} == [Yy] ]]; then
 	echo -e "IP et port du proxy (example : 192.168.1.1:9999) ?"
-	read IPPROXY
-	echo "Acquire::http::Proxy "http://${IPPROXY}";" > /etc/apt/apt.conf.d/01proxy
+	read -r IPPROXY
+	echo "Acquire::http::Proxy \"http://${IPPROXY}\";" > /etc/apt/apt.conf.d/01proxy
 fi
 #=============================================================================
 
@@ -408,8 +408,8 @@ fi
 # Install Webmin
 #=============================================================================
 echo -ne "\033[32;1mVoulez-vous installer Webmin (y/N): \033[0m"
-read WEBMIN
-: ${WEBMIN:="N"}
+read -r WEBMIN
+: "${WEBMIN:="N"}"
 if [[ ${WEBMIN} == [Yy] ]]; then
 	wget http://prdownloads.sourceforge.net/webadmin/webmin_1.801_all.deb &&
 	dpkg --install webmin_1.801_all.deb ||
@@ -422,8 +422,8 @@ fi
 # Install Avahi
 #=============================================================================
 echo -ne "\033[32;1mVoulez-vous installer Avahi Daemon (y/N): \033[0m"
-read AVAHI
-: ${AVAHI:="N"}
+read -r AVAHI
+: "${AVAHI:="N"}"
 if [[ ${AVAHI} == [Yy] ]]; then
 	apt-get install -y avahi-daemon
 	echo -e "\033[34m========================================================================================================\033[0m"
@@ -438,8 +438,8 @@ fi
 # Install Glances
 #=============================================================================
 echo -ne "\033[32;1mVoulez-vous installer Glances (via pip) (y/N): \033[0m"
-read GLANCES
-: ${GLANCES:="N"}
+read -r GLANCES
+: "${GLANCES:="N"}"
 if [[ ${GLANCES} == [Yy] ]]; then
 	wget -O- http://bit.ly/glances | /bin/bash
 fi
@@ -449,8 +449,8 @@ fi
 # Install cheat (via pip) https://github.com/chrisallenlane/cheat
 #=============================================================================
 echo -ne "\033[32;1mVoulez-vous installer cheat (via pip) (y/N): \033[0m"
-read CHEAT
-: ${CHEAT:="N"}
+read -r CHEAT
+: "${CHEAT:="N"}"
 if [[ ${CHEAT} == [Yy] ]]; then
 	apt-get install -y python-pip
     pip install cheat
@@ -461,8 +461,8 @@ fi
 # Install UFW
 #=============================================================================
 echo -ne "\033[32;1mVoulez-vous installer UFW (y/N): \033[0m"
-read UFW
-: ${UFW:="N"}
+read -r UFW
+: "${UFW:="N"}"
 if [[ ${UFW} == [Yy] ]]; then
 	apt-get install -y ufw
     ufw allow ssh
@@ -475,8 +475,8 @@ fi
 # Install fail2ban & rkhunter
 #=============================================================================
 echo -ne "\033[32;1mVoulez-vous installer des systèmes anti-malwares/bruteforce (y/N): \033[0m"
-read FAIL2BAN
-: ${FAIL2BAN:="N"}
+read -r FAIL2BAN
+: "${FAIL2BAN:="N"}"
 if [[ ${FAIL2BAN} == [Yy] ]]; then
 	apt-get install -y fail2ban rkhunter
   dpkg-reconfigure rkhunter
@@ -487,8 +487,8 @@ fi
 # Install Issue personnalisé
 #=============================================================================
 #echo -ne "\033[32;1mVoulez-vous une bannière de connexion personnalisée (y/N): \033[0m"
-#read ISSUE
-#: ${ISSUE:="N"}
+#read -r ISSUE
+#: "${ISSUE:="N"}"
 #if [[ ${ISSUE} == [Yy] ]]; then
 #	wget http://dl.thelinuxfr.org/contribs/issue && mv issue /etc/issue
 #fi

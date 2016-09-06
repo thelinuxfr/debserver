@@ -2,17 +2,17 @@ shellcheck-debserver7:
   image: rdeavila/docker-shellcheck:latest
   script:
     - shellcheck --version
-    - shellcheck -x -s bash debserver7
+    - shellcheck -x -e SC2154 -s bash debserver7
 shellcheck-debserver8:
   image: rdeavila/docker-shellcheck:latest
   script:
     - shellcheck --version
-    - shellcheck -x -s bash debserver8
+    - shellcheck -x -e SC2154 -s bash debserver8
 shellcheck-debserver9:
   image: rdeavila/docker-shellcheck:latest
   script:
     - shellcheck --version
-    - shellcheck -x -s bash debserver9
+    - shellcheck -x -e SC2154 -s bash debserver9
 debian7:
   image: debian:wheezy
   script: "./test.sh debserver7"
