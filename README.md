@@ -1,4 +1,4 @@
-# DEBServer [![build status](https://git.lietart.fr/thelinuxfr/debserver/badges/master/build.svg)](https://git.lietart.fr/thelinuxfr/debserver/commits/master)
+# DEBServer [![build status](https://git.lietart.fr/tifredfr/debserver/badges/master/build.svg)](https://git.lietart.fr/tifredfr/debserver/commits/master)
 
 Petit script permettant d'automatiser plusieurs tâches pour Debian (Wheezy, Jessie).
 **ATTENTION** : le script remplace certains paramètres (bashrc, sources.list)
