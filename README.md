@@ -1,6 +1,6 @@
 # DEBServer [![build status](https://git.lietart.fr/tifredfr/debserver/badges/master/build.svg)](https://git.lietart.fr/tifredfr/debserver/commits/master)
 
-Petit script permettant d'automatiser plusieurs tâches pour Debian (Wheezy, Jessie).
+Petit script permettant d'automatiser plusieurs tâches pour Debian (Wheezy, Jessie, Stretch).
 **ATTENTION** : le script remplace certains paramètres (bashrc, sources.list)
 
 ### Jessie
@@ -9,8 +9,11 @@ wget -O- https://git.lietart.fr/thelinuxfr/debserver/raw/master/debserver8 | /bi
 ### Wheezy
 wget -O- https://git.lietart.fr/thelinuxfr/debserver/raw/master/debserver7 | /bin/bash
 
-### Testing
+### Stretch
 wget -O- https://git.lietart.fr/thelinuxfr/debserver/raw/master/debserver9 | /bin/bash
+
+### Testing
+wget -O- https://git.lietart.fr/thelinuxfr/debserver/raw/master/debserver-testing | /bin/bash
 
 ---
 **Applications installées :**

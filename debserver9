@@ -21,7 +21,7 @@
 
 # Syntaxe: # su - -c "./debserver"
 # Syntaxe: or # sudo ./debserver
-# VERSION="9.0-dev"
+# VERSION="9.0-20170608"
 
 #=============================================================================
 # Liste des applications à installer: A adapter a vos besoins

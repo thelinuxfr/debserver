@@ -13,6 +13,13 @@ shellcheck-debserver9:
   script:
     - shellcheck --version
     - shellcheck -x -e SC2154 -e SC2086 -s bash debserver9
+shellcheck-debserver-testing:
+  image: rdeavila/docker-shellcheck:latest
+  script:
+    - shellcheck --version
+    - shellcheck -x -e SC2154 -e SC2086 -s bash debserver-testing
+
+
 debian7:
   image: debian:wheezy
   script: "./test.sh debserver7"
@@ -22,6 +29,10 @@ debian8:
   script: "./test.sh debserver8"
 
 debian9:
-  image: debian:testing
+  image: debian:stretch
   script: "./test.sh debserver9"
+
+debian-testing:
+  image: debian:testing
+  script: "./test.sh debserver-testing"
   allow_failure: true
