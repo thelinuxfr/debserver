@@ -21,12 +21,12 @@
 
 # Syntaxe: # su - -c "./debserver"
 # Syntaxe: or # sudo ./debserver
-# VERSION="testing"
+# VERSION="testing-20170608"
 
 #=============================================================================
 # Liste des applications à installer: A adapter a vos besoins
 # Voir plus bas les applications necessitant un depot specifique
-LISTE="ntp htop tree most ccze iftop molly-guard manpages-fr manpages-fr-extra tmux bash-completion needrestart wget"
+LISTE="ntp htop tree most ccze iftop molly-guard manpages-fr manpages-fr-extra tmux bash-completion needrestart wget btrfs-tools"
 #=============================================================================
 
 #=============================================================================
@@ -41,7 +41,7 @@ fi
 #=============================================================================
 # Test si version de Debian OK
 #=============================================================================
-if [ "$(cut -d. -f2 /etc/debian_version)" == "sid" ]; then
+if [ "$(cut -d. -f1 /etc/debian_version)" == "sid" ]; then
 				echo "Version compatible, début de l'installation"
 else
         echo "Script non compatible avec votre version de Debian" 1>&2
@@ -53,32 +53,32 @@ fi
 # Mise a jour de la liste des depots
 #=============================================================================
 echo "
-deb http://httpredir.debian.org/debian testing main contrib non-free
-#deb-src http://httpredir.debian.org/debian testing main contrib non-free
+deb http://deb.debian.org/debian/ stretch main contrib non-free
+#deb-src http://deb.debian.org/debian/ stretch main contrib non-free
 
-deb http://httpredir.debian.org/debian/ testing-updates main contrib non-free
-#deb-src http://httpredir.debian.org/debian/ testing-updates main contrib non-free
+deb http://deb.debian.org/debian/ stretch-updates main contrib non-free
+#deb-src http://deb.debian.org/debian/ stretch-updates main contrib non-free
 
-deb http://security.debian.org/ testing/updates main contrib non-free
-#deb-src http://security.debian.org/ testing/updates main contrib non-free
+deb http://deb.debian.org/debian-security stretch/updates main
+#deb-src http://deb.debian.org/debian-security stretch/updates main
 
 ###Third Parties Repos
 ## Deb-multimedia.org
-#deb http://www.deb-multimedia.org testing main non-free
+#deb http://www.deb-multimedia.org stretch main non-free
 
 ## Debian Backports
-#deb http://httpredir.debian.org/debian testing-backports main
+#deb http://httpredir.debian.org/debian stretch-backports main
 
 ## HWRaid
 # wget -O - http://hwraid.le-vert.net/debian/hwraid.le-vert.net.gpg.key | sudo apt-key add -
-#deb http://hwraid.le-vert.net/debian testing main" > /etc/apt/sources.list
+#deb http://hwraid.le-vert.net/debian stretch main" > /etc/apt/sources.list
 #=============================================================================
 
 #=============================================================================
 # Update
 #=============================================================================
 echo -e "\033[34m========================================================================================================\033[0m"
-echo "Mise a jour de la liste des depots"
+echo "Mise à jour de la liste des dépôts"
 echo -e "\033[34m========================================================================================================\033[0m"
 apt-get update
 clear
@@ -88,7 +88,7 @@ clear
 # Upgrade
 #=============================================================================
 echo -e "\033[34m========================================================================================================\033[0m"
-echo "Mise a jour du systeme"
+echo "Mise à jour du système"
 echo -e "\033[34m========================================================================================================\033[0m"
 apt-get upgrade
 clear
@@ -176,7 +176,7 @@ clear
 #=============================================================================
 # Email admin
 #=============================================================================
-echo -ne "\033[32;1mAdresse mail pour les rapports de securite: \033[0m"
+echo -ne "\033[32;1mAdresse mail pour les rapports de sécurité: \033[0m"
 read -r MAIL
 #=============================================================================
 
@@ -367,6 +367,7 @@ read -r LMSENSORS
 : "${LMSENSORS:="N"}"
 if [[ ${LMSENSORS} == [Yy] ]]; then
 	apt-get install -y lm-sensors
+  yes | sensors-detect > /dev/null &
 fi
 #=============================================================================
 
@@ -382,7 +383,7 @@ if [[ ${CRONAPT} == [Yy] ]]; then
 APTCOMMAND=/usr/bin/apt-get
 MAILTO=\"$MAIL\"
 MAILON=\"upgrade\"" > /etc/cron-apt/config
-echo -ne "\033[32;1mVoulez-vous installer les mises à jours automatiquements (Y/n): \033[0m"
+echo -ne "\033[32;1mVoulez-vous installer les mises à jours automatiquement (Y/n): \033[0m"
 read -r CRONAPTAUTO
 : "${CRONAPTAUTO:="Y"}"
 if [[ ${CRONAPTAUTO} == [Yy] ]]; then
@@ -437,23 +438,28 @@ fi
 #=============================================================================
 # Install Glances
 #=============================================================================
-echo -ne "\033[32;1mVoulez-vous installer Glances (via pip) (y/N): \033[0m"
+echo -ne "\033[32;1mVoulez-vous installer Glances (y/N): \033[0m"
 read -r GLANCES
 : "${GLANCES:="N"}"
 if [[ ${GLANCES} == [Yy] ]]; then
-	wget -O- http://bit.ly/glances | /bin/bash
+  echo -ne "\033[32;1mVoulez-vous installer Glances via PIP (y/N): \033[0m"
+  read -r GLANCESPIP
+  if [[ ${GLANCESPIP} == [Yy] ]]; then
+	   wget -O- http://bit.ly/glances | /bin/bash
+    else apt-get install -y glances
+  fi
 fi
 #=============================================================================
 
 #=============================================================================
 # Install cheat (via pip) https://github.com/chrisallenlane/cheat
 #=============================================================================
-echo -ne "\033[32;1mVoulez-vous installer cheat (via pip) (y/N): \033[0m"
+echo -ne "\033[32;1mVoulez-vous installer Cheat (via pip) (y/N): \033[0m"
 read -r CHEAT
 : "${CHEAT:="N"}"
 if [[ ${CHEAT} == [Yy] ]]; then
 	apt-get install -y python-pip
-    pip install cheat
+  pip install cheat
 fi
 #=============================================================================
 
@@ -499,12 +505,13 @@ fi
 #=============================================================================
 clear
 echo -e "\033[34m========================================================================================================\033[0m"
-echo "Liste d'applications utiles installées"
+echo "Liste d'applications utiles installées :"
 echo "$LISTE"
+echo ""
 echo "Pensez à aller dans /etc/default pour configurer les daemons smartmontools hdparm"
 echo ""
-echo "Notes de publication : https://www.debian.org/releases/testing/releasenotes"
-echo "Manuel d'installation : https://www.debian.org/releases/testing/installmanual"
+echo "Notes de publication : https://www.debian.org/releases/stretch/releasenotes"
+echo "Manuel d'installation : https://www.debian.org/releases/stretch/installmanual"
 echo ""
 echo "Le cahier de l'administrateur Debian : https://debian-handbook.info/browse/fr-FR/stable/"
 echo -e "\033[34m========================================================================================================\033[0m"
