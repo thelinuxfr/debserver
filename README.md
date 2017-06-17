@@ -4,16 +4,16 @@ Petit script permettant d'automatiser plusieurs tâches pour Debian (Wheezy, Jes
 **ATTENTION** : le script remplace certains paramètres (bashrc, sources.list)
 
 ### Jessie
-wget -O- https://git.lietart.fr/thelinuxfr/debserver/raw/master/debserver8 | /bin/bash
+wget -O- https://git.lietart.fr/tifredfr/debserver/raw/master/debserver8 | /bin/bash
 
 ### Wheezy
-wget -O- https://git.lietart.fr/thelinuxfr/debserver/raw/master/debserver7 | /bin/bash
+wget -O- https://git.lietart.fr/tifredfr/debserver/raw/master/debserver7 | /bin/bash
 
 ### Stretch
-wget -O- https://git.lietart.fr/thelinuxfr/debserver/raw/master/debserver9 | /bin/bash
+wget -O- https://git.lietart.fr/tifredfr/debserver/raw/master/debserver9 | /bin/bash
 
 ### Testing
-wget -O- https://git.lietart.fr/thelinuxfr/debserver/raw/master/debserver-testing | /bin/bash
+wget -O- https://git.lietart.fr/tifredfr/debserver/raw/master/debserver-testing | /bin/bash
 
 ---
 **Applications installées :**
